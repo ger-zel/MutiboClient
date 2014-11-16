@@ -1,0 +1,9 @@
+<resources>
+
+    <string name="app_name">MutiboClient</string>
+
+    <string name="login_string">login</string>
+
+    <string name="password_string">password</string>
+
+</resources>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/filmImage1"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="65dp"
+        android:layout_marginTop="30dp"
+        android:src="@android:drawable/alert_light_frame" />
+
+    <TextView
+        android:id="@+id/filmName1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/filmImage1"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="29dp"
+        android:layout_toRightOf="@+id/filmImage1"
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ImageView
+        android:id="@+id/filmImage2"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignLeft="@+id/filmImage1"
+        android:layout_below="@+id/filmImage1"
+        android:src="@android:drawable/alert_light_frame" />
+
+    <TextView
+        android:id="@+id/filmName2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/filmName1"
+        android:layout_alignTop="@+id/filmImage2"
+        android:layout_marginTop="28dp"
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ImageView
+        android:id="@+id/filmImage3"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/filmImage2"
+        android:layout_toLeftOf="@+id/filmName1"
+        android:src="@android:drawable/alert_light_frame" />
+
+    <TextView
+        android:id="@+id/filmName3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/filmName2"
+        android:layout_centerVertical="true"
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ImageView
+        android:id="@+id/filmImage4"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignLeft="@+id/filmImage3"
+        android:layout_below="@+id/filmImage3"
+        android:src="@android:drawable/alert_light_frame" />
+
+    <TextView
+        android:id="@+id/filmName4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/filmName3"
+        android:layout_alignTop="@+id/filmImage4"
+        android:layout_marginTop="28dp"
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <CheckBox
+        android:id="@+id/checkBoxFilm1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/filmName1"
+        android:layout_toLeftOf="@+id/filmImage2" />
+
+    <CheckBox
+        android:id="@+id/checkBoxFilm2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/filmName2"
+        android:layout_toLeftOf="@+id/filmImage2" />
+
+    <CheckBox
+        android:id="@+id/checkBoxFilm3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/filmName3"
+        android:layout_toLeftOf="@+id/filmImage3" />
+
+    <CheckBox
+        android:id="@+id/checkBoxFilm4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/filmName4"
+        android:layout_toLeftOf="@+id/filmImage4" />
+
+    <ImageButton
+        android:id="@+id/playButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/filmImage4"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/ic_pass" />
+
+    <ImageButton
+        android:id="@+id/settingsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/playButton"
+        android:layout_marginRight="32dp"
+        android:src="@drawable/ic_play" />
+
+    <ImageButton
+        android:id="@+id/quitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/checkBoxFilm4"
+        android:layout_alignTop="@+id/playButton"
+        android:src="@drawable/fifty_fifty" />
+
+</RelativeLayout>

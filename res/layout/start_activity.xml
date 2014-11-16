@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <EditText
+        android:id="@+id/loginText"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="26dp"
+        android:layout_marginTop="122dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="@string/login_string" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/passText"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/loginText"
+        android:layout_below="@+id/loginText"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:text="@string/password_string" />
+
+    <Button
+        android:id="@+id/signInButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/passText"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:text="Sign In" />
+
+    <ImageButton
+        android:id="@+id/playButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="36dp"
+        android:layout_marginTop="48dp"
+        android:src="@drawable/ic_play" />
+
+    <ImageButton
+        android:id="@+id/leadersButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/playButton"
+        android:layout_alignTop="@+id/loginText"
+        android:src="@drawable/ic_leaders" />
+
+    <ImageButton
+        android:id="@+id/quitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/settingsButton"
+        android:layout_below="@+id/settingsButton"
+        android:layout_marginTop="38dp"
+        android:src="@drawable/ic_quit" />
+
+    <ImageButton
+        android:id="@+id/settingsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/leadersButton"
+        android:layout_alignTop="@+id/signInButton"
+        android:src="@drawable/ic_settings" />
+
+    <ProgressBar
+        android:id="@+id/loginSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/leadersButton"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
