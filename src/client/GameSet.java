@@ -9,17 +9,35 @@ public class GameSet{
 	private long id;
 		
 	private String firstFilmName;
-	private String firstFilmImageURL;
+	private String secondFilmName;
+	private String thirdFilmName;
+	private String fourthFilmName;
+	
+	private long oddId;
+	private String explanation;	
+
 	private long rating;
+	
+	public final Long MIN_RATING = (long) 10;
 
 	private Set<String> usersWhoRatedGameSet;
 
 	GameSet(){}
 	
-	public GameSet(String firstFilmName, String firstFilmImageURL, long rating) {
+	public GameSet(String firstFilmName, 
+				   String secondFilmName,
+				   String thirdFilmName,
+				   String fourthFilmName,
+				   long oddId,
+				   String explanation,
+				   long rating) {
 		super();
 		this.firstFilmName = firstFilmName;
-		this.firstFilmImageURL = firstFilmImageURL;
+		this.secondFilmName = secondFilmName;
+		this.thirdFilmName = thirdFilmName;
+		this.fourthFilmName = fourthFilmName;
+		this.oddId = oddId;
+		this.explanation = explanation;
 		this.rating = rating;
 	}
 	public void setFirstFilmName(String firstFilmName) {
@@ -28,12 +46,6 @@ public class GameSet{
 	public String getFirstFilmName() {
 		return this.firstFilmName;
 	}	
-	public void setFirstFilmImageURL(String firstFilmImageURL) {
-		this.firstFilmImageURL = firstFilmImageURL;
-	}
-	public String getFirstFilmImageURL() {
-		return this.firstFilmImageURL;
-	}
 	public void setRating(long rating) {
 		this.rating = rating;
 	}
@@ -62,5 +74,44 @@ public class GameSet{
 	}
 	public Collection<String> getUsersWhoRatedGameSet(){
 		return usersWhoRatedGameSet;
+	}
+
+	public String getSecondFilmName() {
+		return secondFilmName;
+	}
+
+	public void setSecondFilmName(String secondFilmName) {
+		this.secondFilmName = secondFilmName;
+	}
+	public String getThirdFilmName() {
+		return thirdFilmName;
+	}
+
+	public void setThirdFilmName(String thirdFilmName) {
+		this.thirdFilmName = thirdFilmName;
+	}
+
+	public String getFourthFilmName() {
+		return fourthFilmName;
+	}
+
+	public void setFourthFilmName(String fourthFilmName) {
+		this.fourthFilmName = fourthFilmName;
+	}
+
+	public long getOddId() {
+		return oddId;
+	}
+
+	public void setOddId(long oddId) {
+		this.oddId = oddId;
+	}
+
+	public String getExplanation() {
+		return explanation;
+	}
+
+	public void setExplanation(String explanation) {
+		this.explanation = explanation;
 	}
 }

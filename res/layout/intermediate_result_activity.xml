@@ -5,31 +5,74 @@
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="57dp"
+        android:layout_marginTop="31dp"
         android:text="Correct/Incorrect"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/filmName1"
+        android:id="@+id/TextView03"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/TextView02"
+        android:layout_alignBottom="@+id/TextView02"
+        android:layout_alignLeft="@+id/TextView01"
+        android:text="Film name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/TextView05"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/TextView04"
+        android:layout_alignBottom="@+id/TextView04"
+        android:layout_marginLeft="17dp"
+        android:layout_toRightOf="@+id/TextView04"
+        android:text="88"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/TextView04"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:maxLines="8"
+        android:layout_alignBaseline="@+id/textView4"
+        android:layout_alignBottom="@+id/textView4"
+        android:layout_alignLeft="@+id/TextView03"
+        android:text="Score:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/FilmName1"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_alignRight="@+id/TextView03"
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="15dp"
+        android:maxLines="4"
         android:text="Small Text Small Text Small Text Small Text Small Text Small Text Smal Text Small Text Small Text Small Text Small Text Smal Text Small Text Small Text Small Text Small Text Smal Text Small Text Small Text Small Text Small Text Smal Text Small Text Small Text Small Text Small Text Smal Text Small Text Small Text Small Text Small Text Smal Text Small Text Small Text Small Text Small Text Smal Text Small Text Small Text Small Text Small Text Smal Text Small Text Small Text Small Text Small Text Smal Text Small Text Small Text Small Text Small Text Smal Text Small Text Small Text Small Text Small Text Small Text Small TextSmall TextSmall TextSmall TextSmall Text"
         android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/TextView06"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/settingsButton"
+        android:layout_marginBottom="16dp"
+        android:layout_toLeftOf="@+id/playButton"
+        android:text="Rate set:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/filmName1"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="14dp"
+        android:layout_alignLeft="@+id/TextView02"
+        android:layout_below="@+id/TextView02"
+        android:layout_marginTop="22dp"
         android:text="Explanation:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -38,36 +81,68 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textView2"
-        android:layout_below="@+id/filmName1"
-        android:layout_marginTop="15dp"
+        android:layout_below="@+id/FilmName1"
+        android:layout_marginTop="16dp"
         android:text="Fails:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/TextView01"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView1"
+        android:layout_alignBottom="@+id/textView1"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="40dp"
+        android:text="Film name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView5"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="18dp"
+        android:layout_toLeftOf="@+id/TextView06"
+        android:text="You choose:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/TextView02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="18dp"
+        android:text="Right choise:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textView3"
         android:layout_alignBottom="@+id/textView3"
-        android:layout_alignLeft="@+id/textView5"
-        android:text="100500"
+        android:layout_alignRight="@+id/textView1"
+        android:text="8"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <ImageButton
-        android:id="@+id/playButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView4"
-        android:layout_marginTop="26dp"
-        android:layout_toRightOf="@+id/textView3"
-        android:src="@drawable/ic_unlike" />
 
     <ImageButton
         android:id="@+id/settingsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView5"
-        android:layout_alignTop="@+id/playButton"
+        android:layout_alignLeft="@+id/textView5"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
         android:src="@drawable/ic_like" />
+
+    <ImageButton
+        android:id="@+id/playButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/TextView05"
+        android:layout_alignTop="@+id/settingsButton"
+        android:src="@drawable/ic_unlike" />
 
 </RelativeLayout>

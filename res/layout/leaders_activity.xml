@@ -23,7 +23,7 @@
         android:src="@android:drawable/ic_menu_revert" />
 
     <TextView
-        android:id="@+id/filmName1"
+        android:id="@+id/FilmName1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -36,8 +36,8 @@
         android:id="@+id/filmName2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/filmName1"
-        android:layout_alignBottom="@+id/filmName1"
+        android:layout_alignBaseline="@+id/FilmName1"
+        android:layout_alignBottom="@+id/FilmName1"
         android:layout_alignParentRight="true"
         android:text="Points"
         android:textAppearance="?android:attr/textAppearanceMedium" />

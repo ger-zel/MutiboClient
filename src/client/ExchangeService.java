@@ -28,8 +28,6 @@ public class ExchangeService extends IntentService {
 	
 	public final static String PARAM_OUT_MSG = "omsg";
 	
-	public final static String PARAM_WITH_IMAGE = "withImage";
-	
 	public final static String PARAM_ID = "paramId";
 	
 	public final static String EXTRA_IN_REST = "restApi";
@@ -41,14 +39,6 @@ public class ExchangeService extends IntentService {
 	public final static String EXTRA_GAME_SET_COLLECTION = "extraGameSetCollection";
 	
 	public final static String EXTRA_BOOLEAN = "extraBoolean";
-	
-	public final static String EXTRA_IMAGE_1 = "extraImage1";
-	
-	public final static String EXTRA_IMAGE_2 = "extraImage2";
-	
-	public final static String EXTRA_IMAGE_3 = "extraImage3";
-	
-	public final static String EXTRA_IMAGE_4 = "extraImage4";
 	
 	public final static String EXTRA_STATUS_RESPONSE_ERROR = "extraStatusResponse";
 	
@@ -103,12 +93,6 @@ public class ExchangeService extends IntentService {
 			Long id = extras.getLong(PARAM_ID);			
 			GameSet set = restUser.getGameSet(id);
 			broadcastIntent.putExtra(EXTRA_GAME_SET, (Parcelable)set);
-			
-			Boolean withImages = extras.getBoolean(PARAM_WITH_IMAGE);
-			
-			if (withImages) {
-				System.out.println("Download images");
-			}
 			
 		} else if (msg.equals(LIKE_GAME_SET_CALL)) {
 			

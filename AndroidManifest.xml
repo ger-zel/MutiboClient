@@ -25,6 +25,9 @@
    		<activity 
             android:name="ui.RoundActivity">
         </activity>
+        <activity 
+            android:name="ui.IntermediateResultActivity">
+        </activity>
         <service android:name="client.ExchangeService"></service>
     </application>
 
