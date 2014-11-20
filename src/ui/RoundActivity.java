@@ -2,12 +2,14 @@ package ui;
 
 import java.util.Random;
 
+import client.ExchangeService;
 import client.GameSet;
 
 import com.mutiboclient.R;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -41,15 +43,23 @@ public class RoundActivity extends Activity{
 	private Integer mUserChoiseId = -1;
 	private Boolean mIsFiftyFiftyUsed = false;
 	
+//	private IntentFilter mFilterGetGameSet;
+	
 	private Random mRandom = new Random();
 	
-	private GameSet gameSet;
+	private GameSet gameSet = null;
 		
 	@Override
 	protected void onCreate(Bundle savedInstanseState){
 		
+		Log.d("RoundActivity", "onCreate()");
+		
 		super.onCreate(savedInstanseState);
 		setContentView(R.layout.round_activity);
+		
+//		mFilterGetGameSet = new IntentFilter(ExchangeService.GET_GAME_SET_CALL);
+//		
+//		mFilterGetGameSet.addCategory(Intent.CATEGORY_DEFAULT);
 				
 		mCheckBoxArray[0] = (CheckBox) findViewById(R.id.CheckBoxFilm1);
 		mCheckBoxArray[1] = (CheckBox) findViewById(R.id.CheckBoxFilm2);
@@ -163,6 +173,12 @@ public class RoundActivity extends Activity{
 					
 				intent.putExtra(IntermediateResultActivity.PARAM_CORRECTNESS, IntermediateResultActivity.VALUE_FALSE);
 				
+				if (mRoundCount == MAX_ROUND_COUNT || mFailsCount == MAX_FAILS_COUNT) {
+					intent.putExtra(IntermediateResultActivity.PARAM_FINISH, IntermediateResultActivity.VALUE_TRUE);
+				} else {
+					intent.putExtra(IntermediateResultActivity.PARAM_FINISH, IntermediateResultActivity.VALUE_FALSE);
+				}
+				
 //				intent.putExtra(IntermediateResultActivity.PARAM_USER_FILM, mFileNameArray[mUserChoiseId].getText().toString());
 				intent.putExtra(IntermediateResultActivity.PARAM_CORRECT_FILM_NAME, mFileNameArray[(int) gameSet.getOddId() - 1].getText().toString());
 				intent.putExtra(IntermediateResultActivity.PARAM_EXPLANATION, gameSet.getExplanation());
@@ -241,6 +257,18 @@ public class RoundActivity extends Activity{
 		        }
 		    }
 		});
+	}
+	
+	@Override
+	protected void onResume(){
+		
+		super.onResume();
+		
+		Log.d("RoundActivity", "onResume()");
+		
+		if (mRoundCount == MAX_ROUND_COUNT || mFailsCount == MAX_FAILS_COUNT) {
+			finish();
+		}
 	}
 
 }
