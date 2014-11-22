@@ -28,6 +28,12 @@
         <activity 
             android:name="ui.IntermediateResultActivity">
         </activity>
+        <activity 
+            android:name="ui.ResultActivity">
+        </activity>
+        <activity 
+            android:name="ui.LeadersActivity">
+        </activity>
         <service android:name="client.ExchangeService"></service>
     </application>
 

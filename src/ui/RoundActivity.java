@@ -2,12 +2,15 @@ package ui;
 
 import java.util.Random;
 
+import ui.StartActivity.UserPointsReceiver;
 import client.ExchangeService;
 import client.GameSet;
 
 import com.mutiboclient.R;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageButton;
@@ -33,21 +37,55 @@ public class RoundActivity extends Activity{
 	private ImageButton mFiftyFiftyButton;
 	private ImageButton mPassButton;
 	private ImageButton mGoCheckButton;
+	private ProgressBar mSpinner;
 	
-	private Integer mFailsCount = 0;
-	private Integer mRoundCount = 0;
+	private Long mFailsCount = 0L;
+	private Long mRoundCount = 0L;
 	
-	private Integer mCurrentScore= 0;
+	private Long mCurrentScore= 0L;
 	
 	private Boolean mIsChecked = false;
 	private Integer mUserChoiseId = -1;
 	private Boolean mIsFiftyFiftyUsed = false;
+	private Long setId = 1L;
+	private Boolean mGameSetIsLoaded = false;
+	private Boolean mLoadInReceiver = true;
 	
-//	private IntentFilter mFilterGetGameSet;
+	private GameSetReceiver mGameSetReceiver;
+	private IntentFilter mFilterGetGameSet;
 	
 	private Random mRandom = new Random();
 	
 	private GameSet gameSet = null;
+	
+	public class GameSetReceiver extends BroadcastReceiver {
+		public static final String ACTION_RESP = ExchangeService.GET_USER_POINTS_CALL;
+		    
+		@Override	
+		public void onReceive(Context context, Intent intent) {
+			
+			mSpinner.setVisibility(View.GONE);
+			
+			if (intent.hasExtra(ExchangeService.EXTRA_STATUS_RESPONSE_ERROR)) {
+				Toast.makeText(getApplicationContext(), "Game set loading failed", Toast.LENGTH_LONG).show();
+			} else {
+				gameSet = (GameSet) intent.getSerializableExtra(ExchangeService.EXTRA_GAME_SET);
+				
+				if (mLoadInReceiver) {
+					mFileNameArray[0].setText(gameSet.getFirstFilmName());
+					mFileNameArray[1].setText(gameSet.getSecondFilmName()); 
+					mFileNameArray[2].setText(gameSet.getThirdFilmName()); 
+					mFileNameArray[3].setText(gameSet.getFourthFilmName());
+					
+					mLoadInReceiver = false;
+				}
+				
+				mGameSetIsLoaded = true;
+			}
+			
+			unregisterReceiver(mGameSetReceiver);
+		}
+	}
 		
 	@Override
 	protected void onCreate(Bundle savedInstanseState){
@@ -56,15 +94,21 @@ public class RoundActivity extends Activity{
 		
 		super.onCreate(savedInstanseState);
 		setContentView(R.layout.round_activity);
-		
-//		mFilterGetGameSet = new IntentFilter(ExchangeService.GET_GAME_SET_CALL);
-//		
-//		mFilterGetGameSet.addCategory(Intent.CATEGORY_DEFAULT);
 				
 		mCheckBoxArray[0] = (CheckBox) findViewById(R.id.CheckBoxFilm1);
 		mCheckBoxArray[1] = (CheckBox) findViewById(R.id.CheckBoxFilm2);
 		mCheckBoxArray[2] = (CheckBox) findViewById(R.id.CheckBoxFilm3);
 		mCheckBoxArray[3] = (CheckBox) findViewById(R.id.CheckBoxFilm4);
+		
+		mCheckBoxArray[0].setChecked(false);
+		mCheckBoxArray[1].setChecked(false);
+    	mCheckBoxArray[2].setChecked(false);
+    	mCheckBoxArray[3].setChecked(false);
+    	
+    	mCheckBoxArray[0].setVisibility(View.VISIBLE);
+    	mCheckBoxArray[1].setVisibility(View.VISIBLE);
+    	mCheckBoxArray[2].setVisibility(View.VISIBLE);
+    	mCheckBoxArray[3].setVisibility(View.VISIBLE);
 		
 		mFileNameArray[0] = (TextView) findViewById(R.id.FilmName1);
 		mFileNameArray[1] = (TextView) findViewById(R.id.FilmName2);
@@ -75,18 +119,43 @@ public class RoundActivity extends Activity{
 		mPassButton= (ImageButton)findViewById(R.id.playButton); // change name if possible
 		mGoCheckButton = (ImageButton)findViewById(R.id.settingsButton); // change name if possible
 		
-		gameSet = new GameSet("Titanic",
-				  			  "Gladiator", 
-				  			  "American Beauty",
-				  			  "King's Speech",
-				  			  (long) 1,
-				  			  "By Oscar Win: All the rest, won best movie and best Actor ",
-				  			  (long)0);
+		mSpinner = (ProgressBar) findViewById(R.id.progressBar1);
+		mSpinner.setVisibility(View.GONE);
 		
-		mFileNameArray[0].setText(gameSet.getFirstFilmName());
-		mFileNameArray[1].setText(gameSet.getSecondFilmName()); 
-		mFileNameArray[2].setText(gameSet.getThirdFilmName()); 
-		mFileNameArray[3].setText(gameSet.getFourthFilmName()); 
+		mFilterGetGameSet = new IntentFilter(ExchangeService.GET_GAME_SET_CALL);
+		
+		mFilterGetGameSet.addCategory(Intent.CATEGORY_DEFAULT);
+		
+		if (mLoadInReceiver) {
+			
+			mSpinner.setVisibility(View.VISIBLE);
+			
+			Intent exchangeIntent = new Intent(RoundActivity.this, ExchangeService.class);
+			
+			exchangeIntent.putExtra(ExchangeService.PARAM_IN_MSG, ExchangeService.GET_GAME_SET_CALL);
+			exchangeIntent.putExtra(ExchangeService.PARAM_ID, setId++);
+
+			mGameSetReceiver = new GameSetReceiver();
+			
+			registerReceiver(mGameSetReceiver, mFilterGetGameSet);
+			
+			startService(exchangeIntent);
+			
+			mGameSetIsLoaded = false;
+		}
+		
+//		gameSet = new GameSet("Titanic",
+//				  			  "Gladiator", 
+//				  			  "American Beauty",
+//				  			  "King's Speech",
+//				  			  (long) 1,
+//				  			  "By Oscar Win: All the rest, won best movie and best Actor ",
+//				  			  (long)0);
+		
+//		mFileNameArray[0].setText(gameSet.getFirstFilmName());
+//		mFileNameArray[1].setText(gameSet.getSecondFilmName()); 
+//		mFileNameArray[2].setText(gameSet.getThirdFilmName()); 
+//		mFileNameArray[3].setText(gameSet.getFourthFilmName()); 
 		
 		mFiftyFiftyButton.setOnClickListener(new OnClickListener() {
 
@@ -148,8 +217,8 @@ public class RoundActivity extends Activity{
 					intent.putExtra(IntermediateResultActivity.PARAM_USER_FILM, mFileNameArray[mUserChoiseId - 1].getText().toString());
 					intent.putExtra(IntermediateResultActivity.PARAM_CORRECT_FILM_NAME, mFileNameArray[(int) gameSet.getOddId() - 1].getText().toString());
 					intent.putExtra(IntermediateResultActivity.PARAM_EXPLANATION, gameSet.getExplanation());
-					intent.putExtra(IntermediateResultActivity.PARAM_CURR_FAILS, mFailsCount.toString());
-					intent.putExtra(IntermediateResultActivity.PARAM_SCORE, mCurrentScore.toString());
+					intent.putExtra(IntermediateResultActivity.PARAM_CURR_FAILS, mFailsCount);
+					intent.putExtra(IntermediateResultActivity.PARAM_SCORE, mCurrentScore);
 					
 					startActivity(intent);
 					
@@ -182,8 +251,8 @@ public class RoundActivity extends Activity{
 //				intent.putExtra(IntermediateResultActivity.PARAM_USER_FILM, mFileNameArray[mUserChoiseId].getText().toString());
 				intent.putExtra(IntermediateResultActivity.PARAM_CORRECT_FILM_NAME, mFileNameArray[(int) gameSet.getOddId() - 1].getText().toString());
 				intent.putExtra(IntermediateResultActivity.PARAM_EXPLANATION, gameSet.getExplanation());
-				intent.putExtra(IntermediateResultActivity.PARAM_CURR_FAILS, mFailsCount.toString());
-				intent.putExtra(IntermediateResultActivity.PARAM_SCORE, mCurrentScore.toString());
+				intent.putExtra(IntermediateResultActivity.PARAM_CURR_FAILS, mFailsCount);
+				intent.putExtra(IntermediateResultActivity.PARAM_SCORE, mCurrentScore);
 				
 				startActivity(intent);
 			}
@@ -267,8 +336,46 @@ public class RoundActivity extends Activity{
 		Log.d("RoundActivity", "onResume()");
 		
 		if (mRoundCount == MAX_ROUND_COUNT || mFailsCount == MAX_FAILS_COUNT) {
+			setId = 1L;
 			finish();
+		} else {
+			
+			mCheckBoxArray[0].setChecked(false);
+			mCheckBoxArray[1].setChecked(false);
+			mCheckBoxArray[2].setChecked(false);
+			mCheckBoxArray[3].setChecked(false);
+			
+			if (!mGameSetIsLoaded) {
+				mSpinner.setVisibility(View.VISIBLE);
+				mLoadInReceiver = true;
+			} else if (gameSet != null){
+				mFileNameArray[0].setText(gameSet.getFirstFilmName());
+				mFileNameArray[1].setText(gameSet.getSecondFilmName()); 
+				mFileNameArray[2].setText(gameSet.getThirdFilmName()); 
+				mFileNameArray[3].setText(gameSet.getFourthFilmName());
+			}
 		}
+	}
+	
+	@Override
+	protected void onPause(){
+		
+		super.onPause();
+		
+		Log.d("RoundActivity", "onResume()");
+		
+		Intent exchangeIntent = new Intent(RoundActivity.this, ExchangeService.class);
+		
+		exchangeIntent.putExtra(ExchangeService.PARAM_IN_MSG, ExchangeService.GET_GAME_SET_CALL);
+		exchangeIntent.putExtra(ExchangeService.PARAM_ID, setId++);
+
+		mGameSetReceiver = new GameSetReceiver();
+		
+		registerReceiver(mGameSetReceiver, mFilterGetGameSet);
+		
+		startService(exchangeIntent);
+		
+		mGameSetIsLoaded = false;
 	}
 
 }

@@ -1,6 +1,8 @@
 package client;
 
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.Map;
 
 import retrofit.RetrofitError;
 import android.app.IntentService;
@@ -42,6 +44,8 @@ public class ExchangeService extends IntentService {
 	
 	public final static String EXTRA_STATUS_RESPONSE_ERROR = "extraStatusResponse";
 	
+	public final static String EXTRA_LEADERS_MAP = "extraLeadersMap";
+	
 	public final static String GET_GAME_SET_LIST_CALL = "getGameSetList";	
 	
 	public final static String GET_REPO_CAPACITY_CALL = "getRepoCapacity";
@@ -54,7 +58,11 @@ public class ExchangeService extends IntentService {
 	
 	public final static String GET_USER_POINTS_CALL = "getUserPoints";
 	
+	public final static String SET_USER_POINTS_CALL = "setUserPoints";
+	
 	public final static String ADD_GAME_SET_CALL = "addGameSet";
+	
+	public final static String GET_LEADERS_CALL = "getLeaders";
 	
 	@Override
 	protected void onHandleIntent(Intent intent) {
@@ -75,49 +83,57 @@ public class ExchangeService extends IntentService {
 		
 		try {
 		
-		if (msg.equals(GET_GAME_SET_LIST_CALL)) {		
-			
-			System.out.println(GET_GAME_SET_LIST_CALL);
-			Collection<GameSet> repoCollection = restUser.getGameSetList();
-			broadcastIntent.putExtra(EXTRA_GAME_SET_COLLECTION, (Parcelable)repoCollection);		
-			
-		} else if (msg.equals(GET_REPO_CAPACITY_CALL)) {
-			
-			System.out.println(GET_REPO_CAPACITY_CALL);
-			Long repoCapacity = restUser.getRepoCapacity();
-			broadcastIntent.putExtra(EXTRA_LONG, repoCapacity);
-			
-		} else if (msg.equals(GET_GAME_SET_CALL)) {
-			
-			System.out.println(GET_GAME_SET_CALL);
-			Long id = extras.getLong(PARAM_ID);			
-			GameSet set = restUser.getGameSet(id);
-			broadcastIntent.putExtra(EXTRA_GAME_SET, (Parcelable)set);
-			
-		} else if (msg.equals(LIKE_GAME_SET_CALL)) {
-			
-			System.out.println(LIKE_GAME_SET_CALL);
-			Long id = extras.getLong(PARAM_ID);		
-			GameSet set = restUser.likeGameSet(id);
-			broadcastIntent.putExtra(EXTRA_GAME_SET, (Parcelable)set);			
-			
-		} else if (msg.equals(UNLIKE_GAME_SET_CALL)) {
-			
-			System.out.println(UNLIKE_GAME_SET_CALL);
-			Long id = extras.getLong(PARAM_ID);		
-			GameSet set = restUser.unlikeGameSet(id);
-			broadcastIntent.putExtra(EXTRA_GAME_SET, (Parcelable)set);
-			
-		} else if (msg.equals(GET_USER_POINTS_CALL)) {
-			
-			Log.d("ExchangeService", GET_USER_POINTS_CALL);
-			Long points = restUser.getUserPoints();
-			broadcastIntent.putExtra(EXTRA_LONG, points);
-			
-		} else if (msg.equals(ADD_GAME_SET_CALL)) {
-			System.out.println(ADD_GAME_SET_CALL);
-			System.out.println("Unimplemented for now");
-		}
+			if (msg.equals(GET_GAME_SET_LIST_CALL)) {		
+				
+				System.out.println(GET_GAME_SET_LIST_CALL);
+				Collection<GameSet> repoCollection = restUser.getGameSetList();
+				broadcastIntent.putExtra(EXTRA_GAME_SET_COLLECTION, (Parcelable)repoCollection);		
+				
+			} else if (msg.equals(GET_REPO_CAPACITY_CALL)) {
+				
+				System.out.println(GET_REPO_CAPACITY_CALL);
+				Long repoCapacity = restUser.getRepoCapacity();
+				broadcastIntent.putExtra(EXTRA_LONG, repoCapacity);
+				
+			} else if (msg.equals(GET_GAME_SET_CALL)) {
+				
+				Log.d("ExchangeService", GET_GAME_SET_CALL);
+				Long id = extras.getLong(PARAM_ID);			
+				Log.d("ExchangeService", "id = " + id);
+				GameSet set = restUser.getGameSet(id);
+	//			broadcastIntent.(EXTRA_GAME_SET, set);
+				broadcastIntent.putExtra(EXTRA_GAME_SET, set);
+				
+			} else if (msg.equals(LIKE_GAME_SET_CALL)) {
+				
+				System.out.println(LIKE_GAME_SET_CALL);
+				Long id = extras.getLong(PARAM_ID);		
+				GameSet set = restUser.likeGameSet(id);
+				broadcastIntent.putExtra(EXTRA_GAME_SET, (Parcelable)set);			
+				
+			} else if (msg.equals(UNLIKE_GAME_SET_CALL)) {
+				
+				System.out.println(UNLIKE_GAME_SET_CALL);
+				Long id = extras.getLong(PARAM_ID);		
+				GameSet set = restUser.unlikeGameSet(id);
+				broadcastIntent.putExtra(EXTRA_GAME_SET, (Parcelable)set);
+				
+			} else if (msg.equals(GET_USER_POINTS_CALL)) {
+				
+				Log.d("ExchangeService", GET_USER_POINTS_CALL);
+				Long points = restUser.getUserPoints();
+				broadcastIntent.putExtra(EXTRA_LONG, points);
+				
+			} else if (msg.equals(SET_USER_POINTS_CALL)) {
+				Log.d("ExchangeService", SET_USER_POINTS_CALL);
+				Long points = extras.getLong(EXTRA_LONG);
+				points = restUser.updateUserPoints(points);
+				broadcastIntent.putExtra(EXTRA_LONG, points);
+			} else if (msg.equals(GET_LEADERS_CALL)) {
+				Log.d("ExchangeService", GET_LEADERS_CALL);
+				Map users = restUser.getLeadersList();
+				broadcastIntent.putExtra(EXTRA_LEADERS_MAP, (Serializable)users);
+			}		
 		
 		} catch (RetrofitError e) {
 			

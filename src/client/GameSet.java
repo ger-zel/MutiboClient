@@ -1,10 +1,16 @@
 package client;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class GameSet{
+public class GameSet implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -51314768720692220L;
 	
 	private long id;
 		

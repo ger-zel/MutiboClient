@@ -36,6 +36,8 @@ public class StartActivity extends Activity{
 	
 	private ImageButton mPlayButton;
 	
+	private ImageButton mLeadersButton;
+	
 	private IntentFilter mFilterCheck;
 	
 	private ProgressBar mSpinner;
@@ -100,7 +102,6 @@ public class StartActivity extends Activity{
 				
 				exchangeIntent.putExtra(ExchangeService.PARAM_IN_MSG, ExchangeService.GET_USER_POINTS_CALL);
 
-				
 				mUserPointsReceiver = new UserPointsReceiver();
 				
 				registerReceiver(mUserPointsReceiver, mFilterCheck);
@@ -134,6 +135,23 @@ public class StartActivity extends Activity{
 					Toast.makeText(getApplicationContext(), "Sign in first!", Toast.LENGTH_LONG).show();
 				}			
 			}			
+		});
+		
+		mLeadersButton = (ImageButton) findViewById(R.id.leadersButton);
+		
+		mLeadersButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				
+				if (mLoggedIn) {
+					Intent startLeaders= new Intent(StartActivity.this, LeadersActivity.class);
+					
+					startActivity(startLeaders);
+				} else {
+					Toast.makeText(getApplicationContext(), "Sign in first!", Toast.LENGTH_LONG).show();
+				}	
+			}
 		});
 		
 		Log.d("StartActivity", "onCreate");

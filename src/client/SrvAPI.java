@@ -1,6 +1,7 @@
 package client;
 
 import java.util.Collection;
+import java.util.Map;
 
 import retrofit.http.Body;
 import retrofit.http.GET;
@@ -21,12 +22,11 @@ public interface SrvAPI {
 
 	public static final String USER_POINTS = "/userPoints";
 	
-	public static final String USER_CHECK = "/user";
+	public static final String LEADERS_LIST = "/leaders";
 
 	public static final String GET_GAME_SET_BY_ID = GAME_SET_SVC_PATH + "/{id}";
 
 	public static final String ID_PARAMETER = "id";
-	
 
 	@GET(GAME_SET_SVC_PATH)
 	public Collection<GameSet> getGameSetList();
@@ -48,6 +48,9 @@ public interface SrvAPI {
 
 	@GET(USER_POINTS)
 	public Long getUserPoints();
+	
+	@GET(LEADERS_LIST)
+	public Map<String, Long> getLeadersList();
 
 	@POST(GAME_SET_SVC_PATH)
 	public GameSet addGameSet(@Body GameSet gameSet);
