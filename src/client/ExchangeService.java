@@ -1,10 +1,18 @@
 package client;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import retrofit.RetrofitError;
+import ui.RoundActivity;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
@@ -99,48 +107,52 @@ public class ExchangeService extends IntentService {
 				
 			} else if (msg.equals(GET_GAME_SET_CALL)) {
 				
-				// TODO: check errors with removed sets
-				
-				GameSet set = null;
-
-				Long repoCapacity = restUser.getRepoCapacity();
-				
 				Log.d("ExchangeService", GET_GAME_SET_CALL);
-				if (mId == 0L) {
-					if (repoCapacity != 0) {
-						mId = 1L;
-					}
-				}
-				Log.d("ExchangeService", "id = " + mId);
 				
-				Boolean weGetIt = false;
+				List<GameSet> gameSetList = loadGameSetList(1L, RoundActivity.MAX_ROUND_COUNT, restUser);
 				
-				while(!weGetIt) {				
-					try {
-						Log.d("ExchangeService", "try id = " + mId);
-						set = restUser.getGameSet(mId);	
-						weGetIt = true;
-						if (mId < repoCapacity)
-							mId++;
-						else 
-							mId = 1L;
-						break;
-						
-					} catch (RetrofitError e) {
-						if (404 == e.getResponse().getStatus()) {
-							weGetIt = false;
-							if (mId < repoCapacity) {
-								mId++;
-								continue;
-							} else {
-								mId = 1L;
-								break;
-							}
-						}
-					}
-				}
+				broadcastIntent.putExtra(EXTRA_GAME_SET, (Serializable)gameSetList);
 				
-				broadcastIntent.putExtra(EXTRA_GAME_SET, set);
+//				GameSet set = null;
+//
+//				Long repoCapacity = restUser.getRepoCapacity();
+//				
+//				Log.d("ExchangeService", GET_GAME_SET_CALL);
+//				if (mId == 0L) {
+//					if (repoCapacity != 0) {
+//						mId = 1L;
+//					}
+//				}
+//				Log.d("ExchangeService", "id = " + mId);
+//				
+//				Boolean weGetIt = false;
+//				
+//				while(!weGetIt) {				
+//					try {
+//						Log.d("ExchangeService", "try id = " + mId);
+//						set = restUser.getGameSet(mId);	
+//						weGetIt = true;
+//						if (mId < repoCapacity)
+//							mId++;
+//						else 
+//							mId = 1L;
+//						break;
+//						
+//					} catch (RetrofitError e) {
+//						if (404 == e.getResponse().getStatus()) {
+//							weGetIt = false;
+//							if (mId < repoCapacity) {
+//								mId++;
+//								continue;
+//							} else {
+//								mId = 1L;
+//								break;
+//							}
+//						}
+//					}
+//				}
+//				
+//				broadcastIntent.putExtra(EXTRA_GAME_SET, set);
 				
 			} else if (msg.equals(LIKE_GAME_SET_CALL)) {
 				
@@ -181,6 +193,68 @@ public class ExchangeService extends IntentService {
 		}		
 		
 		sendBroadcast(broadcastIntent);
+	}
+	
+	private List<GameSet> loadGameSetList(Long startId, Integer num, SrvAPI rest) {
+	
+		class GameSetCallable implements Callable<GameSet> {
+			
+			private Long id;
+			private SrvAPI rest;
+			
+			GameSetCallable(Long id, SrvAPI rest) {
+				this.id = id;
+				this.rest = rest;
+			}
+
+			@Override
+			public GameSet call() throws Exception {
+				
+				GameSet set = null;
+				
+				try {
+					set = rest.getGameSet(id);	
+					
+				} catch (RetrofitError e) {
+					if (404 == e.getResponse().getStatus()) {
+						set = null;
+					}
+				}
+				
+				return set;
+			}					
+		}
+		
+		List<GameSet> setList = new ArrayList<GameSet>();
+		List<Future<GameSet>> futuresList = new ArrayList<Future<GameSet>> ();
+		
+		ExecutorService executor = Executors.newFixedThreadPool(num);
+		
+		for (Long i = 0L; i <= num.longValue(); i++) {
+			
+			Future<GameSet> future = executor.submit(new GameSetCallable(i + startId, rest));
+			futuresList.add(future);
+		}
+		
+		for (Future<GameSet> fut : futuresList) {
+			
+			GameSet set = null;
+			try {
+				set = fut.get();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			if (set != null) {
+				setList.add(set);
+			}
+		}
+		
+		return setList;
 	}
 
 }
