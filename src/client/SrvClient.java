@@ -28,7 +28,7 @@ public class SrvClient {
 		.setPassword(password)
 		.setClientId(CLIENT_ID)
 		.setClient(new ApacheClient(UnsafeHttpsClient.getNewHttpClient()))
-		.setEndpoint(SERVER).setLogLevel(LogLevel.FULL).build()
+		.setEndpoint(SERVER).setLogLevel(LogLevel.BASIC).build()
 		.create(SrvAPI.class);	
 		
 		return mSrvClient;

@@ -66,10 +66,9 @@ public class RoundActivity extends Activity{
 			
 			mSpinner.setVisibility(View.GONE);
 			
-			if (intent.hasExtra(ExchangeService.EXTRA_STATUS_RESPONSE_ERROR)) {
-				Toast.makeText(getApplicationContext(), "Game set loading failed", Toast.LENGTH_LONG).show();
-			} else {
-				gameSet = (GameSet) intent.getSerializableExtra(ExchangeService.EXTRA_GAME_SET);
+			gameSet = (GameSet) intent.getSerializableExtra(ExchangeService.EXTRA_GAME_SET);
+			
+			if (gameSet != null) {
 				
 				if (mLoadInReceiver) {
 					mFileNameArray[0].setText(gameSet.getFirstFilmName());
@@ -79,8 +78,10 @@ public class RoundActivity extends Activity{
 					
 					mLoadInReceiver = false;
 				}
-				
+					
 				mGameSetIsLoaded = true;
+			} else {
+				Toast.makeText(getApplicationContext(), "Can't load game set", Toast.LENGTH_LONG).show();
 			}
 			
 			unregisterReceiver(mGameSetReceiver);
@@ -121,42 +122,18 @@ public class RoundActivity extends Activity{
 		
 		mSpinner = (ProgressBar) findViewById(R.id.progressBar1);
 		mSpinner.setVisibility(View.GONE);
-		
-		mFilterGetGameSet = new IntentFilter(ExchangeService.GET_GAME_SET_CALL);
-		
-		mFilterGetGameSet.addCategory(Intent.CATEGORY_DEFAULT);
+//		
+//		mFilterGetGameSet = new IntentFilter(ExchangeService.GET_GAME_SET_CALL);
+//		
+//		mFilterGetGameSet.addCategory(Intent.CATEGORY_DEFAULT);
 		
 		if (mLoadInReceiver) {
 			
 			mSpinner.setVisibility(View.VISIBLE);
 			
-			Intent exchangeIntent = new Intent(RoundActivity.this, ExchangeService.class);
-			
-			exchangeIntent.putExtra(ExchangeService.PARAM_IN_MSG, ExchangeService.GET_GAME_SET_CALL);
-			exchangeIntent.putExtra(ExchangeService.PARAM_ID, setId++);
-
-			mGameSetReceiver = new GameSetReceiver();
-			
-			registerReceiver(mGameSetReceiver, mFilterGetGameSet);
-			
-			startService(exchangeIntent);
-			
-			mGameSetIsLoaded = false;
+			loadGameSet(setId++);
 		}
-		
-//		gameSet = new GameSet("Titanic",
-//				  			  "Gladiator", 
-//				  			  "American Beauty",
-//				  			  "King's Speech",
-//				  			  (long) 1,
-//				  			  "By Oscar Win: All the rest, won best movie and best Actor ",
-//				  			  (long)0);
-		
-//		mFileNameArray[0].setText(gameSet.getFirstFilmName());
-//		mFileNameArray[1].setText(gameSet.getSecondFilmName()); 
-//		mFileNameArray[2].setText(gameSet.getThirdFilmName()); 
-//		mFileNameArray[3].setText(gameSet.getFourthFilmName()); 
-		
+				
 		mFiftyFiftyButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -219,6 +196,7 @@ public class RoundActivity extends Activity{
 					intent.putExtra(IntermediateResultActivity.PARAM_EXPLANATION, gameSet.getExplanation());
 					intent.putExtra(IntermediateResultActivity.PARAM_CURR_FAILS, mFailsCount);
 					intent.putExtra(IntermediateResultActivity.PARAM_SCORE, mCurrentScore);
+					intent.putExtra(IntermediateResultActivity.PARAM_ID, gameSet.getId());
 					
 					startActivity(intent);
 					
@@ -253,6 +231,7 @@ public class RoundActivity extends Activity{
 				intent.putExtra(IntermediateResultActivity.PARAM_EXPLANATION, gameSet.getExplanation());
 				intent.putExtra(IntermediateResultActivity.PARAM_CURR_FAILS, mFailsCount);
 				intent.putExtra(IntermediateResultActivity.PARAM_SCORE, mCurrentScore);
+				intent.putExtra(IntermediateResultActivity.PARAM_ID, gameSet.getId());
 				
 				startActivity(intent);
 			}
@@ -340,10 +319,17 @@ public class RoundActivity extends Activity{
 			finish();
 		} else {
 			
+			mIsFiftyFiftyUsed = false;
+			
 			mCheckBoxArray[0].setChecked(false);
 			mCheckBoxArray[1].setChecked(false);
 			mCheckBoxArray[2].setChecked(false);
 			mCheckBoxArray[3].setChecked(false);
+	    	
+	    	mCheckBoxArray[0].setVisibility(View.VISIBLE);
+	    	mCheckBoxArray[1].setVisibility(View.VISIBLE);
+	    	mCheckBoxArray[2].setVisibility(View.VISIBLE);
+	    	mCheckBoxArray[3].setVisibility(View.VISIBLE);
 			
 			if (!mGameSetIsLoaded) {
 				mSpinner.setVisibility(View.VISIBLE);
@@ -362,13 +348,22 @@ public class RoundActivity extends Activity{
 		
 		super.onPause();
 		
-		Log.d("RoundActivity", "onResume()");
+		Log.d("RoundActivity", "onPause()");
+		
+		loadGameSet(setId++);
+	}
+	
+	private void loadGameSet(Long id) {
 		
 		Intent exchangeIntent = new Intent(RoundActivity.this, ExchangeService.class);
 		
 		exchangeIntent.putExtra(ExchangeService.PARAM_IN_MSG, ExchangeService.GET_GAME_SET_CALL);
-		exchangeIntent.putExtra(ExchangeService.PARAM_ID, setId++);
+		exchangeIntent.putExtra(ExchangeService.PARAM_ID, id);
 
+		mFilterGetGameSet = new IntentFilter(ExchangeService.GET_GAME_SET_CALL);
+		
+		mFilterGetGameSet.addCategory(Intent.CATEGORY_DEFAULT);
+		
 		mGameSetReceiver = new GameSetReceiver();
 		
 		registerReceiver(mGameSetReceiver, mFilterGetGameSet);

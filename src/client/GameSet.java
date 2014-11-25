@@ -120,4 +120,12 @@ public class GameSet implements Serializable{
 	public void setExplanation(String explanation) {
 		this.explanation = explanation;
 	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 }

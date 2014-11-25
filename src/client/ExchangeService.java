@@ -64,6 +64,8 @@ public class ExchangeService extends IntentService {
 	
 	public final static String GET_LEADERS_CALL = "getLeaders";
 	
+	private static Long mId = 0L;
+	
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		
@@ -97,11 +99,47 @@ public class ExchangeService extends IntentService {
 				
 			} else if (msg.equals(GET_GAME_SET_CALL)) {
 				
+				// TODO: check errors with removed sets
+				
+				GameSet set = null;
+
+				Long repoCapacity = restUser.getRepoCapacity();
+				
 				Log.d("ExchangeService", GET_GAME_SET_CALL);
-				Long id = extras.getLong(PARAM_ID);			
-				Log.d("ExchangeService", "id = " + id);
-				GameSet set = restUser.getGameSet(id);
-	//			broadcastIntent.(EXTRA_GAME_SET, set);
+				if (mId == 0L) {
+					if (repoCapacity != 0) {
+						mId = 1L;
+					}
+				}
+				Log.d("ExchangeService", "id = " + mId);
+				
+				Boolean weGetIt = false;
+				
+				while(!weGetIt) {				
+					try {
+						Log.d("ExchangeService", "try id = " + mId);
+						set = restUser.getGameSet(mId);	
+						weGetIt = true;
+						if (mId < repoCapacity)
+							mId++;
+						else 
+							mId = 1L;
+						break;
+						
+					} catch (RetrofitError e) {
+						if (404 == e.getResponse().getStatus()) {
+							weGetIt = false;
+							if (mId < repoCapacity) {
+								mId++;
+								continue;
+							} else {
+								mId = 1L;
+								break;
+							}
+						}
+					}
+				}
+				
 				broadcastIntent.putExtra(EXTRA_GAME_SET, set);
 				
 			} else if (msg.equals(LIKE_GAME_SET_CALL)) {
@@ -109,14 +147,14 @@ public class ExchangeService extends IntentService {
 				System.out.println(LIKE_GAME_SET_CALL);
 				Long id = extras.getLong(PARAM_ID);		
 				GameSet set = restUser.likeGameSet(id);
-				broadcastIntent.putExtra(EXTRA_GAME_SET, (Parcelable)set);			
+				broadcastIntent.putExtra(EXTRA_GAME_SET, set);			
 				
 			} else if (msg.equals(UNLIKE_GAME_SET_CALL)) {
 				
 				System.out.println(UNLIKE_GAME_SET_CALL);
 				Long id = extras.getLong(PARAM_ID);		
 				GameSet set = restUser.unlikeGameSet(id);
-				broadcastIntent.putExtra(EXTRA_GAME_SET, (Parcelable)set);
+				broadcastIntent.putExtra(EXTRA_GAME_SET, set);
 				
 			} else if (msg.equals(GET_USER_POINTS_CALL)) {
 				
